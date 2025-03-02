@@ -1,2 +1,2 @@
 # Expense-Tracker
-This is our lab project and we will work here.
+This is our lab project, and a group of four people who will work on it here.
