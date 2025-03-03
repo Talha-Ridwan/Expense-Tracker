@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Yourself</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registration/otp.css' %}">
+</head>
+<body>
+    <div class="otp-container">
+        <h2>Enter OTP</h2>
+        <input type="text" name="otp" id="otp" class="otp-input" placeholder="Enter your OTP">
+        <button id="verify-button">Verify OTP</button>
+        <div id="loading" style="display: none;">Loading...</div>
+    </div>
+
+    <script>
+        $('#verify-button').click(function(){
+            $('#loading').show(); // Show loading indicator
+
+            let otp = $('#otp').val();
+            console.log("OTP entered:", otp);
+            
+            if (otp === '{{otp}}') {
+                console.log('OTP Matched');
+                $.ajax({
+                    beforeSend: function() {
+                        $('#loading').show(); // Show loading indicator before sending request
+                    },
+
+                    type: 'POST',
+                    url: '{% url "verify_otp" %}',
+                    data: {
+                        'otp': otp,
+                        'first_name': '{{first_name}}',
+                        'last_name': '{{last_name}}',
+                        'email': '{{email}}',
+                        'username': '{{username}}',
+                        'password1': '{{password1}}',
+                        'password2': '{{password2}}'
+                    },
+                    success: function(data) {
+                        window.location.href = "my-login";
+                    },
+                    error: function() {
+                        $('#loading').hide(); // Hide loading indicator on error
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            } else {
+                alert("Invalid OTP! Please try again.");
+                $('#loading').hide(); // Hide loading indicator if OTP is invalid
+            }
+        });
+    </script>
+</body>
+</html>

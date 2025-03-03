@@ -1,0 +1,58 @@
+/* styles.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 0;
+}
+
+.otp-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 320px;
+}
+
+.otp-container h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.otp-input {
+    width: calc(100% - 24px); /* Ensuring equal padding on both sides */
+    padding: 12px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border 0.3s;
+    box-sizing: border-box; /* Fixing width calculation */
+}
+
+.otp-input:focus {
+    border-color: #667eea;
+}
+
+#verify-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 18px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#verify-button:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
