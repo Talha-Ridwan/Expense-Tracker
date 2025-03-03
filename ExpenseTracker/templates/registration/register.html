@@ -5,14 +5,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/registration/resgistration.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registration/registration.css' %}">
 </head>
 <body>
-    <h1>Register Now!</h1>
-    <form method="POST" autocapitalize="off">
-        {% csrf_token %}
-        {{registerform.as_p}}
-        <input type="submit" value="Register">
-    </form>
+    <div class="container">
+        <h1>Create Your Account</h1>
+        <form method="POST" autocapitalize="off">
+            {% csrf_token %}
+
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="id_first_name">First name:</label>
+                {{ registerform.first_name }}
+                {% if registerform.first_name.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.first_name.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="id_last_name">Last name:</label>
+                {{ registerform.last_name }}
+                {% if registerform.last_name.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.last_name.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="id_username">Username:</label>
+                {{ registerform.username }}
+                <div id="username-feedback"></div>
+                
+                <!-- Suggestions will appear here dynamically -->
+                <div id="username-suggestions" style="display: none; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 5px; max-height: 200px; overflow-y: auto;">
+                </div>
+
+                {% if registerform.username.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.username.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="id_email">Email address:</label>
+                {{ registerform.email }}
+                {% if registerform.email.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.email.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="id_password1">Password:</label>
+                {{ registerform.password1 }}
+                {% if registerform.password1.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.password1.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="id_password2">Password confirmation:</label>
+                {{ registerform.password2 }}
+                {% if registerform.password2.errors %}
+                    <ul class="error-list">
+                        {% for error in registerform.password2.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="{% url 'my-login' %}">Log in</a></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const usernameInput = document.getElementById("id_username");
+            const feedbackElement = document.getElementById("username-feedback");
+            const suggestionsElement = document.getElementById("username-suggestions");
+
+            // Event listener for username input field
+            usernameInput.addEventListener("input", function (event) {
+                const username = event.target.value;
+
+                if (username.length >= 3) {
+                    fetch(`/check_username/?username=${username}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.username_taken) {
+                                let suggestionsHTML = data.suggestions
+                                    .map(suggestion => `<li class="suggestion-item">${suggestion}</li>`)
+                                    .join("");
+
+                                feedbackElement.innerHTML = `<span style="color: red;">Username is already taken.</span>`;
+                                suggestionsElement.innerHTML = `<strong>Suggestions:</strong><ul>${suggestionsHTML}</ul>`;
+                                suggestionsElement.style.display = "block"; // Show the suggestions box
+                            } else {
+                                feedbackElement.innerHTML = `<span style="color: green;">Username is available!</span>`;
+                                suggestionsElement.style.display = "none"; // Hide suggestions if username is available
+                            }
+                        })
+                        .catch(error => console.error("Error checking username:", error));
+                } else {
+                    feedbackElement.innerHTML = ''; // Clear feedback if username is too short
+                    suggestionsElement.style.display = "none"; // Hide suggestions
+                }
+            });
+
+            // Event listener for clicking on a username suggestion
+            suggestionsElement.addEventListener("click", function (event) {
+                if (event.target && event.target.classList.contains("suggestion-item")) {
+                    usernameInput.value = event.target.textContent; // Set clicked suggestion as username
+                    feedbackElement.innerHTML = `<span style="color: green;">Username is available!</span>`;
+                    suggestionsElement.style.display = "none"; // Hide suggestions
+                }
+            });
+        });
+    </script>
 </body>
 </html>

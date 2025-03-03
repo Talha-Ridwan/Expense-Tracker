@@ -8,11 +8,58 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/login/login.css' %}">
 </head>
 <body>
-    <h1>Login Here</h1>
-    <form method="POST" autocapitalize="off">
-        {% csrf_token %}
-        {{loginform.as_p}}
-        <input type="submit" value="Login">
-    </form>
+    <div class="container">
+        <h1>Login to Your Account</h1>
+        <form method="POST" autocapitalize="off">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="id_username">Username or Email:</label>
+                {{ loginform.username }}
+                {% if loginform.username.errors %}
+                    <ul class="error-list">
+                        {% for error in loginform.username.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <div class="password-container">
+                    {{ loginform.password }}
+                    <span id="toggle-password" class="toggle-password">👁️</span>
+                </div>
+                {% if loginform.password.errors %}
+                    <ul class="error-list">
+                        {% for error in loginform.password.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <input type="submit" class="submit-btn" value="Login">
+        </form>
+
+        <p class="login-link">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const togglePassword = document.getElementById("toggle-password");
+            const passwordInput = document.querySelector(".password-container input");
+
+            togglePassword.addEventListener("click", function () {
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
+                this.textContent = type === "password" ? "👁️" : "🙈";
+            });
+        });
+    </script>
 </body>
 </html>
