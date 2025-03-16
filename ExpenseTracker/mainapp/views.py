@@ -90,20 +90,46 @@ def check_username(request):
     })
 
 
+# def my_login(request):
+#     form = LoginForm()
+#     if request.method == 'POST':
+#         form = LoginForm(request, data=request.POST)
+#         print('asdf')
+#         if form.is_valid():
+#             username = request.POST.get('username')
+#             password = request.POST.get('password')
+#             print('hi')
+
+#             user = authenticate(request,username=username, password=password)
+            
+#             if user is not None:
+#                 auth.login(request, user)
+#                 return redirect("dashboard")
+#     context = {'loginform':form}
+#     return render(request, 'login/login.html',context)
+
+
 def my_login(request):
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-
-            user = authenticate(request,username=username, password=password)
-            if user is not None:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print('asdf')
+        users = User.objects.values('email', 'username')  # Get both email and username
+        for user_data in users:
+            if username == user_data['email']:
+                username = user_data['username']
+                break
+        print(username)
+        user = authenticate(request,username=username, password=password)
+        if user is not None:
                 auth.login(request, user)
                 return redirect("dashboard")
     context = {'loginform':form}
     return render(request, 'login/login.html',context)
+
+
 
 def user_logout(request):
     auth.logout(request)
