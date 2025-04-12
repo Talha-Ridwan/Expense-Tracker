@@ -1,0 +1,38 @@
+.navbar {
+    background-color: #0D1B2A; /* Dark professional blue */
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .navbar-buttons button {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 0.5rem 1rem;
+    margin-left: 10px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .navbar-buttons button:hover {
+    background-color: white;
+    color: #0D1B2A;
+  }
+  
+  .sidebar {
+    width: 60px;
+    background-color: #1B263B;
+    height: 100vh;
+  }
+  
