@@ -10,7 +10,8 @@
 <body>
     <div class="container">
         <h1>Create Your Account</h1>
-        <form method="POST" autocapitalize="off">
+        <form method="POST" action="/register/" autocapitalize="off">
+
             {% csrf_token %}
 
             <!-- First Name -->
